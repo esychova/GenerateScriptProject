@@ -7,6 +7,7 @@ public class TableGenerator {
     private String tableName;
     private Class cl;
 
+    private String result = "";
     public TableGenerator(String className) {
 
         try {
@@ -16,13 +17,19 @@ public class TableGenerator {
             this.tableName = generateTableName(className);
             Field[] fields = cl.getDeclaredFields();
             for(Field field : fields)   {
-                String st = field.getName();
+                result += generateColumn(field);
+
 
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+
+   private static String generateColumn(Field field)   {
+       return new TableColumn(field.getName(), field.getGenericType()).toScript();
+   }
+
 
     private static String generateTableName(String className)   {
         String[] words = className.split("(?<=.)(?=\\p{Upper})");
